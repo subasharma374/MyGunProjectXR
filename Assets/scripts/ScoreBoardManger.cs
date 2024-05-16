@@ -1,19 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreBoardLoader : MonoBehaviour
+public class ScoreboardManger : MonoBehaviour
 {
-
-    [System.Serializable]
-    public class ScoreEntry
-    {
-        public string playerName;
-        public int score;
-    }
-
-    public List<ScoreEntry> scoreEntries;
     public GameObject scoreboardEntryTemplate;
     public Transform content;
 
@@ -30,8 +20,8 @@ public class ScoreBoardLoader : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        // Populate the scoreboard
-        foreach (var scoreEntry in scoreEntries)
+        // Populate the scoreboard from ScoreManager
+        foreach (var scoreEntry in ScoreManager.Instance.scoreEntries)
         {
             GameObject newEntry = Instantiate(scoreboardEntryTemplate, content);
             newEntry.transform.Find("PlayerNameText").GetComponent<Text>().text = scoreEntry.playerName;
