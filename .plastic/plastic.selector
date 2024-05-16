@@ -1,0 +1,4 @@
+repository "MyGunProject@subasharma374@cloud"
+  path "/"
+    br "/main"
+    co "/main"
