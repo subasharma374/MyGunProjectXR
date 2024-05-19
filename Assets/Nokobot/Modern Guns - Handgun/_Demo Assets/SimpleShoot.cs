@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
+
 
 [AddComponentMenu("Nokobot/Modern Guns/Simple Shoot")]
 public class SimpleShoot : MonoBehaviour
@@ -16,13 +19,26 @@ public class SimpleShoot : MonoBehaviour
     [SerializeField] private Transform barrelLocation;
     [SerializeField] private Transform casingExitLocation;
 
+
+    //[SerializeField] InputActionReference leftHapticAction;
+    //[SerializeField] InputActionReference rightHapticAction;
+
     [Header("Settings")]
     [Tooltip("Specify time to destory the casing object")] [SerializeField] private float destroyTimer = 2f;
     [Tooltip("Bullet Speed")] [SerializeField] private float shotPower = 500f;
     [Tooltip("Casing Ejection Speed")] [SerializeField] private float ejectPower = 150f;
 
     [Header("XR Settings")]
-    public XRBaseController controller;
+    [SerializeField] XRBaseController RightController;
+    [SerializeField] XRBaseController LeftController;
+
+    //public AudioSource source;
+    //public AudioClip fireSound;
+
+    public AudioClip fireSound;
+
+
+
 
     void Start()
     {
@@ -31,32 +47,61 @@ public class SimpleShoot : MonoBehaviour
 
         if (gunAnimator == null)
             gunAnimator = GetComponentInChildren<Animator>();
+
+        if (RightController == null)
+        {
+            RightController = FindObjectOfType<XRBaseController>();
+            //controller = FindObjectOfType<XRController>();
+            if (RightController != null)
+            {
+                Debug.Log("Controller found and assigned.");
+            }
+            else
+            {
+                Debug.LogError("Controller not found.");
+            }
+        }
     }
 
     public void PullTheTrigger()
     {
         gunAnimator.SetTrigger("Fire");
 
-        if (controller != null) 
-            {
-            controller.SendHapticImpulse(0.5f, 0.3f);
-            }
+  
+
+        SendHaptics();
+        
     }
 
-    //void Update()
-    //{
-        //If you want a different input, change it here
-        //if (Input.GetButtonDown("Fire1"))
-        //{
-            //Calls animation on the gun that has the relevant animation events that will fire
-            //gunAnimator.SetTrigger("Fire");
-        //}
-    //}
+    public void SendHaptics()
+    {
+        if (RightController != null)
+        {
+            
+            RightController.SendHapticImpulse(1f, 0.15f);
+        }
+
+       
+
+        
+    }
+
+   
 
 
     //This function creates the bullet behavior
     void Shoot()
     {
+        //source.PlayOneShot(fireSound);
+        if (fireSound != null)
+        {
+            Debug.Log("Playing fire sound");
+            AudioSource.PlayClipAtPoint(fireSound, barrelLocation.position);
+        }
+        else
+        {
+            Debug.LogError("Fire sound is not assigned");
+        }
         if (muzzleFlashPrefab)
         {
             //Create the muzzle flash
