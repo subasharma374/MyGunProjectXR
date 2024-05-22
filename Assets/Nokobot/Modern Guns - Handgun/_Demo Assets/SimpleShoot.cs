@@ -95,7 +95,7 @@ public class SimpleShoot : MonoBehaviour
         //source.PlayOneShot(fireSound);
         if (fireSound != null)
         {
-            //Debug.Log("Playing fire sound");
+            Debug.Log("Playing fire sound");
             AudioSource.PlayClipAtPoint(fireSound, barrelLocation.position);
         }
         else
@@ -117,10 +117,8 @@ public class SimpleShoot : MonoBehaviour
         { return; }
 
         // Create a bullet and add force on it in direction of the barrel
-        //Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
-        GameObject bullet = Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation);
-        bullet.tag = "Bullet"; // Set the tag of the instantiated bullet
-        bullet.GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+        Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+
     }
 
     //This function creates a casing at the ejection slot
